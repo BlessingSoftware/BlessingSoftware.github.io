@@ -1,6 +1,6 @@
 "use strict";
-$('.menu .item')
-    .tab();
+$('.menu .item').tab();
+var chart;
 function clearFilter() {
     var last = document.querySelector("#series div a.active");
     if (last) {
@@ -51,25 +51,54 @@ function filterAmiibo(n) {
         }
     }
 }
-var r = new XMLHttpRequest();
-r.open("GET", "lineup.json", true);
-r.onreadystatechange = function () {
-    if (r.readyState != 4 || r.status != 200)
-        return;
-    // alert("Success: " + r.responseText);
-    new Vue({
-        el: '#lineup',
-        data: JSON.parse(r.responseText)
-    });
-    new Vue({
-        el: '#series',
-        data: JSON.parse(r.responseText),
-        filters: {
-            colorSeries: function (value) {
-                return "color: " + value.color + "; background: " + value.bgcolor + ";";
+function initLineup() {
+    var r = new XMLHttpRequest();
+    r.open("GET", "lineup.json", true);
+    r.onreadystatechange = function () {
+        if (r.readyState != 4 || r.status != 200)
+            return;
+        var result = JSON.parse(r.responseText);
+        // if (chart) {
+        //     Object.assign(chart, result);
+        // } else
+        //     chart = result;
+        // alert("Success: " + r.responseText);
+        new Vue({
+            el: '#lineup',
+            data: result
+        });
+        new Vue({
+            el: '#series',
+            data: result,
+            filters: {
+                colorSeries: function (value) {
+                    return "color: " + value.color + "; background: " + value.bgcolor + ";";
+                }
             }
-        }
-    });
-    // $('.menu .item').tab();
-};
-r.send();
+        });
+        // $('.menu .item').tab();
+    };
+    r.send();
+}
+function initSoft() {
+    var r = new XMLHttpRequest();
+    r.open("GET", "software.json", true);
+    r.onreadystatechange = function () {
+        if (r.readyState != 4 || r.status != 200)
+            return;
+        var result = JSON.parse(r.responseText);
+        // if (chart) {
+        //     Object.assign(chart, result);
+        // } else
+        //     chart = result;
+        // alert("Success: " + r.responseText);
+        new Vue({
+            el: '#soft',
+            data: result
+        });
+        // $('.menu .item').tab();
+    };
+    r.send();
+}
+initLineup();
+initSoft();

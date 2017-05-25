@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-    <title></title>
+    <title>Amiibo Gallery</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.js"></script>
     <script src="//cdn.bootcss.com/vue/2.3.3/vue.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.css">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style.css" ch rel="stylesheet">
 </head>
 
 <body class="pushable jp">
@@ -27,8 +27,8 @@
         <div class="ui container">
 
             <div class="ui top attached tabular menu">
-                <a class="item active" data-tab="first"></a>
-                <a class="item" data-tab="second">Soft</a>
+                <a class="item active" data-tab="first" href="#lineup"></a>
+                <a class="item" data-tab="second" href="#soft">Soft</a>
                 <a class="item" data-tab="third">Chart</a>
             </div>
             <div class="ui bottom attached tab segment active" data-tab="first">
@@ -42,7 +42,7 @@
 
                 <div class="ui link cards" id="lineup" v-cloak>
 
-                    <div class="card" v-for="lineup in item" :data-series="lineup.series">
+                    <div class="card" v-for="lineup in item" :data-series="lineup.series" :data-date="lineup.date">
 
                         <div class="image">
                             <img :alt="lineup.code" :src="`https://www.nintendo.co.jp/hardware/amiibo/lineup/img/thumb/_small/${lineup.code}.png`">
@@ -66,7 +66,28 @@
                 </div>
             </div>
             <div class="ui bottom attached tab segment" data-tab="second">
-                Second
+                <div class="ui link cards" id="soft" v-cloak>
+
+                    <div class="card" v-for="soft in item" :data-series="lineup.series" :data-date="lineup.date">
+                        <div class="image">
+                            <img :alt="soft.name" :src="`https://www.nintendo.co.jp/hardware/amiibo/game/img/thumb/${soft.code}.png`">
+                        </div>
+                        <div class="content">
+                            <div class="header" v-html="soft.name"></div>
+                            <div class="meta">
+                                <a onclick="findFilter(this);" :data-tab="soft.series">{{ soft.series }}</a>
+                            </div>
+                            <div class="description" v-html="soft.info">                                
+                            </div>
+                        </div>
+                        <div class="extra content">
+                            <span class="right floated">{{ soft.dispalydate }}</span>
+                            <span>
+                            <i class="money icon"></i> <span>{{ soft.price }}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="ui bottom attached tab segment" data-tab="third">
                 Third
