@@ -1,0 +1,72 @@
+[v-cloak] {
+  display: none;
+}
+
+[l-hidden] {
+  display: none !important;
+}
+
+body.jp i.money+span::after {
+  content: ' 円+税';
+}
+
+body div.gheader {
+  background-color: rgb(255, 255, 255);
+  border-bottom-color: rgb(60, 60, 60);
+  border-bottom-style: none;
+  border-bottom-width: 0px;
+  border-image-outset: 0px;
+  border-image-repeat: stretch;
+  border-image-slice: 100%;
+  border-image-source: none;
+  border-image-width: 1;
+  border-left-color: rgb(60, 60, 60);
+  border-left-style: none;
+  border-left-width: 0px;
+  border-right-color: rgb(60, 60, 60);
+  border-right-style: none;
+  border-right-width: 0px;
+  border-top-color: rgb(60, 60, 60);
+  border-top-style: none;
+  border-top-width: 0px;
+  box-shadow: rgba(4, 0, 0, 0.1) 0px 1px 0px 0px;
+  color: rgb(60, 60, 60);
+  display: block;
+  height: 74px;
+  left: 0px;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  transform: matrix(1, 0, 0, 1, 0, 0);
+  transition-delay: 0s;
+  transition-duration: 0.5s;
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  z-index: 999;
+  zoom: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+body div.pusher {
+  margin-top: 74px;
+  padding-top: 8px;
+}
+
+body div.labels.right {
+  padding: 8px;
+  float: right;
+}
+
+body.jp div.menu a.item[data-tab="first"]::after {
+  content: "シリーズ";
+}
+
+body.en div.menu a.item[data-tab="first"]::after {
+  content: "Series";
+}
+
+a.label.active {
+  background-color: #009c95!important;
+  border-color: #009c95!important;
+  color: #FFF!important;
+}
