@@ -9,14 +9,17 @@
     <script src="//cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.js"></script>
     <script src="//cdn.bootcss.com/vue/2.3.3/vue.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.css">
-    <link href="css/style.css" ch rel="stylesheet">
+
 </head>
 
 <body class="pushable jp">
 
     <div class="gheader">
 
+
+
         <div class="ui labels right">
+            <b>Language:</b>
             <a class="ui basic label active"><i class="jp flag"></i></a>
             <a class="ui basic label "><i class="us flag"></i></a>
         </div>
@@ -32,61 +35,69 @@
                 <a class="item" data-tab="third">Chart</a>
             </div>
             <div class="ui bottom attached tab segment active" data-tab="first">
-                <div id="series" v-cloak>
+                <div class="ui floating labeled icon dropdown button">
+                    <i class="filter icon"></i>
+                    <span class="text en">Sort</span>
+                    <span class="text jp">すべて表示</span>
+                    <div class="menu"> 
+                        <div class="item jp">すべて表示</div>
+                        <div class="divider"></div>
+                        <div class="item jp">
+                            発売日順で表示
+                        </div>
+                        <div class="item jp">
+                            名前順で表示
+                        </div>
+                        <div class="item jp">
+                            シリーズ別に表示
+                        </div>
+                    </div>
+                </div>
+                <div class="ui left icon action input">
+                    <i class="search icon"></i>
+                    <input type="text" placeholder="">
+                    <div class="ui blue submit button">Search</div>
+                </div>
+                <div class="ui horizontal divider">
+                </div>
+                <!--<div class="ui category search">
+                    <div class="ui icon input">
+                        <input class="prompt" type="text" placeholder="Search animals...">
+                        <i class="search icon"></i>
+                    </div>
+                    <div class="results"></div>
+                </div>-->
+                <div id="series">
                     <div class="ui labels">
                         <a class="ui basic label active" onclick="clearFilter();">All</a>
-                        <a class="ui basic label" :data-tab="series.name" :data-nameJP="series.name" :style="series|colorSeries" v-for="series in series_item"
-                            onclick="filterAmiibo(this);">{{ series.name }}</a>
+                        <series-card v-for="series in series_item" :style="series|colorSeries" :series="series"></series-card>
+                        <div class="ui teal buttons" style="display:none;">
+                            <div class="ui button" onclick="console.log(this)">All</div>
+                            <div class="ui combo top right pointing dropdown icon button">
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <div class="item" v-for="series in series_item" :style="series|colorSeries" :series="series" onclick="console.log(this)">{{ series.name }}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="ui link cards" id="lineup" v-cloak>
-
-                    <div class="card" v-for="lineup in item" :data-series="lineup.series" :data-date="lineup.date">
-
-                        <div class="image">
-                            <img :alt="lineup.code" :src="`https://www.nintendo.co.jp/hardware/amiibo/lineup/img/thumb/_small/${lineup.code}.png`">
-                        </div>
-                        <div class="content">
-                            <div class="header"> {{ lineup.name }}</div>
-                            <div class="meta">
-                                <a onclick="findFilter(this);" :data-tab="lineup.series">{{ lineup.series }}</a>
-                            </div>
-                            <div class="description">
-                                Matthew is an interior designer living in New York.
-                            </div>
-                        </div>
-                        <div class="extra content">
-                            <span class="right floated">{{ lineup.dispalydate }}</span>
-                            <span>
-                            <i class="money icon"></i> <span>{{ lineup.price }}</span>
-                            </span>
-                        </div>
-                    </div>
+                <div class="ui link cards" id="lineup">
+                    <amiibo-card :lineup="lineup" v-for="lineup in item"></amiibo-card>
                 </div>
             </div>
             <div class="ui bottom attached tab segment" data-tab="second">
-                <div class="ui link cards" id="soft" v-cloak>
-
-                    <div class="card" v-for="soft in item" :data-series="lineup.series" :data-date="lineup.date">
-                        <div class="image">
-                            <img :alt="soft.name" :src="`https://www.nintendo.co.jp/hardware/amiibo/game/img/thumb/${soft.code}.png`">
-                        </div>
-                        <div class="content">
-                            <div class="header" v-html="soft.name"></div>
-                            <div class="meta">
-                                <a onclick="findFilter(this);" :data-tab="soft.series">{{ soft.series }}</a>
-                            </div>
-                            <div class="description" v-html="soft.info">                                
-                            </div>
-                        </div>
-                        <div class="extra content">
-                            <span class="right floated">{{ soft.dispalydate }}</span>
-                            <span>
-                            <i class="money icon"></i> <span>{{ soft.price }}</span>
-                            </span>
-                        </div>
+                <div id="hardware-series">
+                    <div class="ui labels">
+                        <a class="ui basic label active" onclick="clearSoftFilter();">All</a>
+                        <a class="ui basic label" data-tab="Switch" onclick="filterSoft(this);">Switch</a>
+                        <a class="ui basic label" data-tab="3DS" onclick="filterSoft(this);">3DS</a>
+                        <a class="ui basic label" data-tab="WiiU" onclick="filterSoft(this);">WiiU</a>
                     </div>
+                </div>
+                <div class="ui link cards" id="soft">
+                    <soft-card v-for="soft in item" :soft="soft"></soft-card>
                 </div>
             </div>
             <div class="ui bottom attached tab segment" data-tab="third">
@@ -97,10 +108,87 @@
         </div>
 
         <div class="ui inverted vertical footer segment">
-            <div class="ui container">
+            <div class="ui container" id="hw">
+                <hello-world></hello-world>
             </div>
         </div>
     </div>
+
+    <script type="text/x-template" id="series-card-template">
+        <a class="ui basic label" :data-tab="series.name" :data-nameJP="series.name" :style="series" onclick="filterAmiibo(this);">{{ series.name }}</a>
+    </script>
+
+    <script type="text/x-template" id="amiibo-card-template">
+
+        <div class="card" :data-series="lineup.series" :data-date="lineup.date">
+            <div class="image">
+                <img :alt="lineup.code" :src="`https://www.nintendo.co.jp/hardware/amiibo/lineup/img/thumb/_small/${lineup.code}.png`">
+            </div>
+            <div class="content">
+                <div class="header" v-html="lineup.name"></div>
+                <div class="meta">
+                    <a onclick="findFilter(this);" :data-tab="lineup.series">{{ lineup.series }}</a>
+                    <a :href="`https://www.nintendo.co.jp/hardware/amiibo/lineup/img/thumb/${lineup.code}.png`" target="_blank">Big Picture</a>
+                </div>
+                <div class="description">
+                    <!--Matthew is an interior designer living in New York.-->
+                </div>
+            </div>
+            <div class="extra content">
+                <span class="right floated">{{ lineup.dispalydate }}</span>
+                <span v-if="lineup.price">
+                    <i class="money icon"></i> <span>{{ lineup.price }}</span>
+                </span>
+            </div>
+            <!--<code v-html="lineup"></code>-->
+        </div>
+    </script>
+
+    <script type="text/x-template" id="soft-card-template">
+        <div class="card" :data-series="soft.series" :data-date="soft.date">
+            <div class="image">
+                <img :alt="soft.name" :src="`https://www.nintendo.co.jp/hardware/amiibo/game/img/thumb/${soft.code}.png`">
+            </div>
+            <div class="content">
+                <div class="header" v-html="soft.name"></div>
+                <div class="meta">
+                    <a onclick="findSoftFilter(this);" :data-tab="soft.chartseries"><span class="ui teal label">{{ soft.chartseries }}</span></a>
+                </div>
+                <div class="description" v-html="soft.info">
+                </div>
+            </div>
+            <div class="extra content">
+                <span class="right floated">{{ soft.dispalydate }}</span>
+                <span v-if="soft.price">
+                    <i class="money icon"></i> <span>{{ soft.price }}</span>
+                </span>
+            </div>
+        </div>
+    </script>
+
+    <script>
+        Vue.component('series-card', {
+            template: '#series-card-template',
+            props: ["series"]
+        })
+        Vue.component('amiibo-card', {
+            template: '#amiibo-card-template',
+            props: ['lineup']
+        })
+
+        Vue.component('soft-card', {
+            template: '#soft-card-template',
+            props: ['soft']
+        })
+
+        $(".ui.floating.dropdown").dropdown();
+
+        let css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.href = `css/style.css?_t=${ new Date().getTime() }`;
+        document.head.appendChild(css);
+    </script>
+
     <script src="index.js">
     </script>
 </body>
